@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promc
+  labels:
+    app: promc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promc
+  template:
+    metadata:
+      labels:
+        app: promc
+    spec:
+      containers:
+      - name: nginx
+        image: memcached
+        ports:
+        - containerPort: 11211
+          name: promc-port
+

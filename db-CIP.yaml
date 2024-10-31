@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-ser
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: con-port
+
+  selector:
+    app: prodb
+  type: ClusterIP  
