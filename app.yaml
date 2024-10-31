@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deploy
+  labels:
+    app: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: vprofile/vprofileapp:V1
+          ports:
+            - containerPort: 8080
+              name: app-port
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: db-pass
+
+      initContainers:
+        - name: init-app
+          image: busybox
+          command: ["sh", "-c", "until nslookup db-deploy; do echo waiting for db; sleep 2; done"]
+          
+        - name: init-memcached
+          image: busybox
+          command: ["sh", "-c", "until nslookup promc; do echo waiting for db; sleep 2; done"]
+
